@@ -1,0 +1,71 @@
+﻿@model IEnumerable<TiendaVirtual.Models.Producto>
+
+@{
+    ViewBag.Title = "Lista de Productos";
+}
+
+<h2>Lista de Productos</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.Nombre)</th>
+            <th>@Html.DisplayNameFor(m => m.Descripcion)</th>
+            <th>@Html.DisplayNameFor(m => m.Precio)</th>
+            <th>@Html.DisplayNameFor(m => m.Stock)</th>
+            <th>@Html.DisplayNameFor(m => m.Imagen)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                <td>@Html.DisplayFor(modelItem => item.Precio)</td>
+                <td>@Html.DisplayFor(modelItem => item.Stock)</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Imagen))
+                    {
+                        <img src="@Url.Content(item.Imagen)" alt="Foto" width="100" />
+                    }
+                    else
+                    {
+                        <span>Sin imagen</span>
+                    }
+                </td>
+                <td>
+                    
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductoId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ProductoId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductoId })
+
+                    <br />
+
+                   
+                    @if (item.Stock > 0)
+                    {
+                        <div>
+                            @using (Html.BeginForm("AddConCantidad", "Carrito", FormMethod.Post))
+                            {
+                                @Html.Hidden("productoId", item.ProductoId)
+                                <input type="number" name="cantidad" value="1" min="1" max="@item.Stock" />
+                                <input type="submit" value="Agregar" class="btn btn-sm btn-primary" />
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary" disabled>Agotado</button>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

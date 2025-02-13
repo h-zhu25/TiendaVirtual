@@ -1,0 +1,64 @@
+﻿@model List<TiendaVirtual.Models.Carrito>
+
+@{
+    ViewBag.Title = "Carrito de Compras";
+}
+
+<h2>Carrito</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No hay productos en el carrito.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.PrecioUnitario</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Subtotal</td>
+                    <td>
+                        <!-- (1) Botón "Eliminar Todo" (Remove) -->
+                        @Html.ActionLink("Eliminar Todo", "Remove", new { id = item.ProductoId },
+                                         new { @class = "btn btn-danger btn-sm" })
+
+                        <br /><br />
+
+                        <!-- (2) Form para "Quitar Parcial" con input type="number" -->
+                        @using (Html.BeginForm("RemovePartial", "Carrito", FormMethod.Post))
+                        {
+                            @Html.Hidden("productoId", item.ProductoId)
+                            <input type="number" name="cantidad" min="1" max="@item.Cantidad" value="1" style="width:60px;" />
+                            <input type="submit" value="Quitar Parcial" class="btn btn-warning btn-sm" />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <!-- Botón para vaciar carrito -->
+        @Html.ActionLink("Vaciar Carrito", "Clear", null, new { @class = "btn btn-warning" })
+    </p>
+
+    <p>
+        <!-- Aquí un enlace para confirmar pedido, si deseas -->
+        @Html.ActionLink("Confirmar Pedido", "ConfirmarPedido", "Carrito", null, new { @class = "btn btn-success" })
+    </p>
+   
+
+}

@@ -1,0 +1,35 @@
+﻿@model TiendaVirtual.Models.Pedido
+
+@{
+    ViewBag.Title = "Detalles del Pedido";
+}
+
+<h2>Detalles del Pedido</h2>
+
+<p>
+    <strong>ID:</strong> @Model.PedidoId<br />
+    <strong>Fecha:</strong> @Model.Fecha<br />
+    <strong>Usuario:</strong> @Model.Usuario<br />
+    <strong>Total:</strong> @Model.Total
+</p>
+
+<h3>Productos</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detalle in Model.Detalles)
+        {
+            <tr>
+                <td>@detalle.Producto.Nombre</td>
+                <td>@detalle.Cantidad</td>
+                <td>@detalle.Subtotal</td>
+            </tr>
+        }
+    </tbody>
+</table>
