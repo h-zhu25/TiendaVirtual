@@ -100,26 +100,34 @@ namespace TiendaVirtual.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, NombreCompleto = model.NombreCompleto };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    NombreCompleto = model.NombreCompleto
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     
                     await UserManager.AddToRoleAsync(user.Id, "User");
 
-                   
+                    
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     return RedirectToAction("Index", "Home");
                 }
 
+                
                 AddErrors(result);
             }
 
+            
             return View(model);
         }
 
-        
+
         [Authorize(Roles = "Admin")]
         public ActionResult CreateAdmin()
         {

@@ -11,6 +11,7 @@ using TiendaVirtual.Models;     // Ajusta a tu namespace real
 
 namespace TiendaVirtual.Controllers
 {
+    [Authorize]
     public class ProductoController : Controller
     {
         private TiendaContext db = new TiendaContext();
@@ -36,12 +37,14 @@ namespace TiendaVirtual.Controllers
         }
 
         // GET: Producto/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
         }
 
         // POST: Producto/Create
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
@@ -74,6 +77,7 @@ namespace TiendaVirtual.Controllers
         }
 
         // GET: Producto/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -87,6 +91,7 @@ namespace TiendaVirtual.Controllers
         }
 
         // POST: Producto/Edit/5
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
@@ -128,6 +133,7 @@ namespace TiendaVirtual.Controllers
         }
 
         // GET: Producto/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -141,6 +147,7 @@ namespace TiendaVirtual.Controllers
         }
 
         // POST: Producto/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

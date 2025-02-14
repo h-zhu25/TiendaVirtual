@@ -7,12 +7,13 @@ using TiendaVirtual.Models;
 
 namespace TiendaVirtual.Controllers
 {
+    [Authorize]
     public class CarritoController : Controller
     {
         private const string CART_SESSION_KEY = "Carrito";
         private TiendaContext db = new TiendaContext();
 
-        // Auxiliar: obtiene o crea la lista de Carrito en Session
+        
         private List<Carrito> GetCarrito()
         {
             var carrito = Session[CART_SESSION_KEY] as List<Carrito>;
@@ -34,6 +35,7 @@ namespace TiendaVirtual.Controllers
         /// <summary>
         /// Agrega un producto al carrito, cantidad fija = 1 (GET)
         /// </summary>
+        [Authorize]
         public ActionResult Add(int id)
         {
             var producto = db.Productos.Find(id);
@@ -69,6 +71,7 @@ namespace TiendaVirtual.Controllers
         /// <summary>
         /// Agrega producto al carrito con cantidad elegida por el usuario (POST)
         /// </summary>
+        
         [HttpPost]
         public ActionResult AddConCantidad(int productoId, int cantidad)
         {
@@ -156,7 +159,7 @@ namespace TiendaVirtual.Controllers
             }
             base.Dispose(disposing);
         }
-
+        [Authorize]
         public ActionResult ConfirmarPedido()
         {
             var carrito = GetCarrito();
@@ -208,8 +211,7 @@ namespace TiendaVirtual.Controllers
                             // 如果库存减少到 0，可以选择设置“已售罄”状态
                             if (producto.Stock == 0)
                             {
-                                // Opcional: 标记为“已售罄”
-                                // producto.Disponible = false; // 如果有字段
+                               
                             }
                         }
                     }
@@ -217,12 +219,12 @@ namespace TiendaVirtual.Controllers
                     db.SaveChanges();
                     transaction.Commit();
 
-                    // 3) 清空购物车
+                    
                     carrito.Clear();
                     Session[CART_SESSION_KEY] = carrito;
 
                     TempData["Success"] = "Pedido confirmado con éxito.";
-                    return RedirectToAction("Index", "Producto"); // 或跳转到“订单详情”页面
+                    return RedirectToAction("Index", "Producto"); 
                 }
                 catch (Exception ex)
                 {
