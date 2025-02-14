@@ -17,6 +17,8 @@ namespace TiendaVirtual.Models
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<DetallePedido> DetallesPedido { get; set; }
+        public DbSet<StockAlert> StockAlerts { get; set; }
+
 
         // Si necesitas más tablas, agrégalas aquí...
 

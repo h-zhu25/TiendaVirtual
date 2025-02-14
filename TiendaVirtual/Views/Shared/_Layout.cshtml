@@ -22,13 +22,17 @@
                     <li>@Html.ActionLink("Product", "Index", "Producto", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Stock", "Index", "Stock", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
                 </ul>
 
 
                 <ul class="navbar-nav ms-auto">
                     @if (Request.IsAuthenticated)
                     {
-                        <!-- 已登录时，显示 "Hola, <username>" 和可用的注销链接（POST 提交） -->
+                        
                         <li class="nav-item">
                             <span class="nav-link text-light">Hola, @User.Identity.Name</span>
                         </li>
@@ -42,7 +46,7 @@
                     }
                     else
                     {
-                        <!-- 未登录时，显示登录和注册 -->
+                        
                         <li class="nav-item">
                             @Html.ActionLink("Login", "Login", "Account", null, new { @class = "nav-link" })
                         </li>

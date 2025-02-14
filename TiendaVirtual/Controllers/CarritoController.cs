@@ -177,7 +177,7 @@ namespace TiendaVirtual.Controllers
                     var pedido = new Pedido
                     {
                         Fecha = DateTime.Now,
-                        Usuario = User.Identity.Name, // 如果有用户系统
+                        Usuario = User.Identity.Name,
                         Total = carrito.Sum(c => c.PrecioUnitario * c.Cantidad)
                     };
                     db.Pedidos.Add(pedido);
@@ -186,7 +186,6 @@ namespace TiendaVirtual.Controllers
                     // 2) Guardar los detalles del pedido y reducir el stock
                     foreach (var item in carrito)
                     {
-                        
                         var detalle = new DetallePedido
                         {
                             PedidoId = pedido.PedidoId,
@@ -206,12 +205,20 @@ namespace TiendaVirtual.Controllers
                                 return RedirectToAction("Index");
                             }
 
+                            
                             producto.Stock -= item.Cantidad;
 
-                            // 如果库存减少到 0，可以选择设置“已售罄”状态
-                            if (producto.Stock == 0)
+                            
+                            if (producto.Stock < 2)
                             {
-                               
+                                var stockAlert = new StockAlert
+                                {
+                                    ProductoId = producto.ProductoId,
+                                    Fecha = DateTime.Now,
+                                    StockActual = producto.Stock,
+                                    Atendido = false
+                                };
+                                db.StockAlerts.Add(stockAlert);
                             }
                         }
                     }
@@ -224,7 +231,7 @@ namespace TiendaVirtual.Controllers
                     Session[CART_SESSION_KEY] = carrito;
 
                     TempData["Success"] = "Pedido confirmado con éxito.";
-                    return RedirectToAction("Index", "Producto"); 
+                    return RedirectToAction("Index", "Producto");
                 }
                 catch (Exception ex)
                 {
@@ -234,6 +241,7 @@ namespace TiendaVirtual.Controllers
                 }
             }
         }
+
 
     }
 }
